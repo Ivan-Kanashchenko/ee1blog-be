@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { validationResult } from "express-validator";
+
+import { registerValidator } from "./validators/auth";
 
 mongoose
   .connect(
@@ -13,24 +16,48 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
+const getToken = (mail: string) =>
+  jwt.sign(
+    {
+      mail: mail,
+    },
+    "secretKey"
+  );
 
 interface RequestBody<T> extends Request {
   body: T;
 }
 
+interface ILogin {
+  mail: string;
+  password: string;
+}
+interface IRegister extends ILogin {
+  mail: string;
+  password: string;
+  fullName: string;
+}
+
+app.post("/auth/login", (req: RequestBody<ILogin>, res: Response) => {
+  const token = getToken(req.body.mail);
+
+  res.json({
+    success: true,
+    token,
+  });
+});
+
 app.post(
-  "/auth/login",
-  (req: RequestBody<{ mail: string; password: string }>, res: Response) => {
-    console.log(req.body);
-    const token = jwt.sign(
-      {
-        mail: req.body.mail,
-      },
-      "secretKey"
-    );
+  "/auth/register",
+  registerValidator,
+  (req: RequestBody<IRegister>, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    }
+    const token = getToken(req.body.mail);
+
     res.json({
       success: true,
       token,
