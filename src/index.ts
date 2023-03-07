@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 
 import { UserControllers } from "./controllers";
-import { authValidator } from "./validators";
+import { singUpValidator, singInValidator } from "./validators";
 import { checkAuth } from "./utils";
 
 mongoose
@@ -14,9 +14,9 @@ const app = express();
 
 app.use(express.json());
 
-app.post("/auth/login", UserControllers.login);
+app.post("/auth/login", singInValidator, UserControllers.login);
 
-app.post("/auth/register", authValidator, UserControllers.register);
+app.post("/auth/register", singUpValidator, UserControllers.register);
 
 app.get("/me", checkAuth, UserControllers.getMe);
 

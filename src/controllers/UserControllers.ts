@@ -79,6 +79,7 @@ const getMe = async (req: UserRequest, res: Response) => {
       ...user._doc,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: SOMETHING_WENT_WRONG });
   }
 };

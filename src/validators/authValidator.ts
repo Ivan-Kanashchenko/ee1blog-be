@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const authValidator = [
+export const singUpValidator = [
   body("mail", "Wrong email format").isEmail(),
   body("password", "Password must contain 8-16 symbols").isLength({
     min: 8,
@@ -11,4 +11,12 @@ export const authValidator = [
     max: 20,
   }),
   body("avatar", "Wrong url").optional().isURL(),
+];
+
+export const singInValidator = [
+  body("mail", "Wrong email format").isEmail(),
+  body("password", "Password must contain 8-16 symbols").isLength({
+    min: 8,
+    max: 16,
+  }),
 ];
