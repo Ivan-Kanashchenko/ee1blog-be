@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const registerValidator = [
+export const authValidator = [
   body("mail", "Wrong email format").isEmail(),
   body("password", "Password must contain 8-16 symbols").isLength({
     min: 8,

@@ -4,7 +4,7 @@
       // other compiler options...
       "esModuleInterop": true,
       "module": "ESNext", // "module": "CommonJS" should work too
-      "moduleResolution": "Node"
+      "moduleResolution": "Node",
     },
     "ts-node": {
         "esm": true,
