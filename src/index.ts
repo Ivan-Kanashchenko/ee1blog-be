@@ -23,7 +23,7 @@ app.get(ROUTES.ME, checkAuth, UserControllers.getMe);
 app.get(ROUTES.POSTS, PostControllers.getPosts);
 app.get(`${ROUTES.POSTS}/:id`, PostControllers.getPost);
 app.post(ROUTES.POSTS, checkAuth, postCreateValidator, PostControllers.createPost);
-app.patch(`${ROUTES.POSTS}/:id`, checkAuth, PostControllers.updatePost);
+app.patch(`${ROUTES.POSTS}/:id`, checkAuth, postCreateValidator, PostControllers.updatePost);
 app.delete(`${ROUTES.POSTS}/:id`, checkAuth, PostControllers.removePost);
 
 app.listen(7777, () => console.log("Server Started"));
