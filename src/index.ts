@@ -23,5 +23,6 @@ app.get(ROUTES.ME, checkAuth, UserControllers.getMe);
 app.get(ROUTES.POSTS, PostControllers.getPosts);
 app.get(`${ROUTES.POSTS}/:id`, PostControllers.getPostById);
 app.post(ROUTES.POSTS, checkAuth, postCreateValidator, PostControllers.createPost);
+app.delete(`${ROUTES.POSTS}/:id`, PostControllers.removePostById);
 
 app.listen(7777, () => console.log("Server Started"));

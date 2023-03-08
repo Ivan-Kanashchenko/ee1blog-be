@@ -47,8 +47,21 @@ const createPost = async (req: UserRequestWithId<PostCreate>, res: Response) => 
   }
 };
 
+const removePostById = async (req: Request, res: Response) => {
+  const _id = req.params?.id;
+  try {
+    await PostModel.findOneAndDelete({ _id });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: ERRORS.SOMETHING_WENT_WRONG });
+  }
+};
+
 export const PostControllers = {
   createPost,
   getPosts,
   getPostById,
+  removePostById,
 };
