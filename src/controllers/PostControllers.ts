@@ -15,6 +15,21 @@ const getPosts = async (_req: Request, res: Response) => {
   }
 };
 
+const getPostById = async (req: Request, res: Response) => {
+  const _id = req.params?.id;
+  try {
+    const doc = await PostModel.findOneAndUpdate({ _id }, { $inc: { viewsCount: 1 } }, { returnDocument: "after" });
+
+    if (!doc) {
+      return res.status(404).json({ message: ERRORS.DOCUMENT_NOT_FOUNT });
+    }
+    res.json(doc);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: ERRORS.SOMETHING_WENT_WRONG });
+  }
+};
+
 const createPost = async (req: UserRequestWithId<PostCreate>, res: Response) => {
   try {
     const post = await new PostModel({
@@ -35,4 +50,5 @@ const createPost = async (req: UserRequestWithId<PostCreate>, res: Response) => 
 export const PostControllers = {
   createPost,
   getPosts,
+  getPostById,
 };
