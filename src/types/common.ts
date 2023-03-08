@@ -9,7 +9,10 @@ export interface DocumentResult<T> extends mongoose.Document {
   _doc: T;
 }
 
-export interface UserRequestWithId<T> extends Request {
+export interface UserAuthorisedRequest extends Request {
+  userId?: string;
+}
+
+export interface UserAuthorisedBodyRequest<T> extends UserAuthorisedRequest {
   body: T;
-  userId: string;
 }
