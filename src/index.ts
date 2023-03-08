@@ -1,9 +1,11 @@
+import { postCreateValidator } from "./validators/postValidator";
 import express from "express";
 import mongoose from "mongoose";
 
-import { UserControllers } from "./controllers";
+import { PostControllers, UserControllers } from "./controllers";
 import { singUpValidator, singInValidator } from "./validators";
 import { checkAuth } from "./utils";
+import { ROUTES } from "./consts";
 
 mongoose
   .connect("mongodb+srv://ee1Solncev:Sinetko225348@testcluster.fewa1fo.mongodb.net/blog?retryWrites=true&w=majority")
@@ -14,10 +16,11 @@ const app = express();
 
 app.use(express.json());
 
-app.post("/auth/login", singInValidator, UserControllers.login);
+app.post(ROUTES.LOGIN, singInValidator, UserControllers.login);
+app.post(ROUTES.REGISTER, singUpValidator, UserControllers.register);
+app.get(ROUTES.ME, checkAuth, UserControllers.getMe);
 
-app.post("/auth/register", singUpValidator, UserControllers.register);
-
-app.get("/me", checkAuth, UserControllers.getMe);
+app.get(ROUTES.POSTS, PostControllers.getPosts);
+app.post(ROUTES.POSTS, checkAuth, postCreateValidator, PostControllers.createPost);
 
 app.listen(7777, () => console.log("Server Started"));

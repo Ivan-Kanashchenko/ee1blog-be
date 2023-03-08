@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 
 import { UserModel } from "../models";
 
-import { SOMETHING_WENT_WRONG, USER_NOT_FOUND } from "../consts";
+import { ERRORS } from "../consts";
 import { createToken } from "../utils";
 import { DocumentResult, ILogin, IRegister, RequestBody, User, UserRequest } from "../types";
 
@@ -12,11 +12,11 @@ const login = async (req: RequestBody<ILogin>, res: Response) => {
   try {
     const user = await UserModel.findOne({ mail: req.body.mail });
 
-    if (!user) return res.status(404).json({ message: USER_NOT_FOUND });
+    if (!user) return res.status(404).json({ message: ERRORS.USER_NOT_FOUND });
 
     const isValidPass = await bcrypt.compare(req.body.password, user.password);
 
-    if (!isValidPass) return res.status(404).json({ message: USER_NOT_FOUND });
+    if (!isValidPass) return res.status(404).json({ message: ERRORS.USER_NOT_FOUND });
 
     const token = createToken(user._id.toString());
 
@@ -31,7 +31,7 @@ const login = async (req: RequestBody<ILogin>, res: Response) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: SOMETHING_WENT_WRONG });
+    res.status(500).json({ message: ERRORS.SOMETHING_WENT_WRONG });
   }
 };
 
@@ -62,7 +62,7 @@ const register = async (req: RequestBody<IRegister>, res: Response) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: SOMETHING_WENT_WRONG });
+    res.status(500).json({ message: ERRORS.SOMETHING_WENT_WRONG });
   }
 };
 
@@ -72,7 +72,7 @@ const getMe = async (req: UserRequest, res: Response) => {
 
     if (!user)
       return res.status(404).json({
-        message: USER_NOT_FOUND,
+        message: ERRORS.USER_NOT_FOUND,
       });
 
     res.status(200).json({
@@ -80,7 +80,7 @@ const getMe = async (req: UserRequest, res: Response) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: SOMETHING_WENT_WRONG });
+    res.status(500).json({ message: ERRORS.SOMETHING_WENT_WRONG });
   }
 };
 
